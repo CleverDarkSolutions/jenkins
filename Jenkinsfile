@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        registry = "darkavenger00/jenkins-docker-test"
+        registry = "CleverDarkSolutions/jenkins-docker-test"
         DOCKERHUB_CREDENTIALS = credentials(1)
     }
     agent {
