@@ -1,7 +1,7 @@
 pipeline {
     environment {
         registry = "darkavenger00/jenkins-docker-test"
-        DOCKERHUB_CREDENTIALS = credentials('1')
+        DOCKERHUB_CREDENTIALS = credentials(1)
     }
     agent {
         docker {
@@ -28,17 +28,21 @@ pipeline {
         stage("Build & Push Docker image") {
             steps {
                 sh 'docker image build -t $registry:$BUILD_NUMBER .'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u mmiotkug --password-stdin'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u leshens --password-stdin'
                 sh 'docker image push $registry:$BUILD_NUMBER'
                 sh "docker image rm $registry:$BUILD_NUMBER"
             }
         }
-
         stage('Deploy and smoke test') {
-                    steps{
-                        sh 'chmod +x ./jenkins/scripts/*.sh'
-                        sh './jenkins/scripts/deploy.sh'
-                    }
-                }
-
+            steps{
+                sh 'chmod +x ./jenkins/scripts/*.sh'
+                sh './jenkins/scripts/deploy.sh'
+            }
+        }
+        stage('Cleanup') {
+            steps{
+                sh './jenkins/scripts/cleanup.sh'
+            }
+        }
+    }
 }
