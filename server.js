@@ -23,3 +23,17 @@ app.get('/hobbies/:id', async (req, res) => {
     }
     res.send(hobby);
 })
+
+app.get('/reversed', async (req, res) => {
+    res.send(hobbies.getReverseHobbies());
+})
+
+app.get('/find/:name', async (req, res) => {
+    const name = req.params.name;
+    const hobby = hobbies.findHobby(name);
+    if(!hobby){
+        res.status(404).send("Hobby not found");
+        return;
+    }
+    res.send(hobby);
+})
